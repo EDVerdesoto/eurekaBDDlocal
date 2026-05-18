@@ -6,21 +6,9 @@ namespace CLIMOV_EurekaBank_RESTDOTNET_GR03.Services
     public sealed class EurekaBankClient
     {
         private static readonly HttpClient HttpClient = CreateHttpClient();
+        private static readonly string[] BaseUrls = ["https://serverrest.dr00p3r.top/api"];
 
-#if ANDROID
-        private static readonly string[] BaseUrls =
-        [
-            "https://10.0.2.2:44342/api",
-            "https://192.168.100.53:44342/api"
-        ];
-#else
-        private static readonly string[] BaseUrls =
-        [
-            "https://localhost:44342/api",
-            "https://10.0.2.2:44342/api",
-            "https://192.168.100.53:44342/api"
-        ];
-#endif
+        public static string? LastConnectionError { get; private set; }
 
         private static HttpClient CreateHttpClient()
         {
@@ -34,6 +22,8 @@ namespace CLIMOV_EurekaBank_RESTDOTNET_GR03.Services
 
         public async Task<bool> LoginAsync(string usuario, string clave)
         {
+            LastConnectionError = null;
+
             foreach (var baseUrl in BaseUrls)
             {
                 try
@@ -42,11 +32,25 @@ namespace CLIMOV_EurekaBank_RESTDOTNET_GR03.Services
                     if (response.IsSuccessStatusCode)
                     {
                         var result = await response.Content.ReadFromJsonAsync<LoginResponse>();
-                        if (result?.success == true) return true;
+                        if (result?.success == true)
+                        {
+                            LastConnectionError = null;
+                            return true;
+                        }
+
+                        LastConnectionError = "Credenciales inválidas.";
+                    }
+                    else
+                    {
+                        LastConnectionError = $"El servidor respondió {(int)response.StatusCode} ({response.ReasonPhrase}).";
                     }
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    LastConnectionError = ex.Message;
+                }
             }
+
             return false;
         }
 

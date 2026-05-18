@@ -70,7 +70,7 @@ namespace CLIMOV_EurekaBank_SOAPDOTNET_GR03.Views
         {
             if (string.IsNullOrWhiteSpace(_usuarioEntry.Text) || string.IsNullOrWhiteSpace(_claveEntry.Text))
             {
-                ShowMessage("Complete todos los campos", false);
+                ShowMessage("⚠️ Complete todos los campos", false);
                 return;
             }
 
@@ -80,16 +80,21 @@ namespace CLIMOV_EurekaBank_SOAPDOTNET_GR03.Views
                 var ok = await _client.LoginAsync(_usuarioEntry.Text.Trim(), _claveEntry.Text);
                 if (!ok)
                 {
-                    ShowMessage("Usuario o clave incorrectos", false);
+                    ShowMessage("❌ Usuario o contraseña incorrectos", false);
                     return;
                 }
 
-                ShowMessage("Inicio de sesión exitoso", true);
+                ShowMessage("✓ Inicio de sesión exitoso", true);
+                await Task.Delay(800);
                 await Navigation.PushAsync(new AccountsScreen(_client));
+            }
+            catch (HttpRequestException ex)
+            {
+                ShowMessage(ex.Message, false);
             }
             catch (Exception ex)
             {
-                ShowMessage($"No se pudo conectar al servidor: {ex.Message}", false);
+                ShowMessage($"❌ Error: {ex.Message}", false);
             }
             finally
             {

@@ -4,7 +4,7 @@ namespace WS_EuBank_RESTDOTNET_GR03
 {
     public class EurekaBankContext : DbContext
     {
-        public EurekaBankContext() : base("name=EurekaBankDB") { }
+        public EurekaBankContext() : base("name=EurekaBankDB2") { }
 
         public DbSet<Cuenta> Cuentas { get; set; }
         public DbSet<Movimiento> Movimientos { get; set; }

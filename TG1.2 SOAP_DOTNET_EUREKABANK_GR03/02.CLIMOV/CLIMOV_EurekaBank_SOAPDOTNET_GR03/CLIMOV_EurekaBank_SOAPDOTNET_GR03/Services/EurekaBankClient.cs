@@ -1,257 +1,145 @@
 using System.Globalization;
-using System.Text;
-using System.Xml.Linq;
+using System.ServiceModel;
+using LoginServiceRef;
+using MovimientosServiceRef;
 
 namespace CLIMOV_EurekaBank_SOAPDOTNET_GR03.Services
 {
     public sealed class EurekaBankClient
     {
-        private static readonly HttpClient HttpClient = new()
-        {
-            Timeout = TimeSpan.FromSeconds(60)
-        };
-
-        private const string JavaSoapUrl = "https://javasoto.dr00p3r.top/WS_EurekaBank_SOAPJAVA_GR03/WSEurekaBank?wsdl";
-        private const string JavaNamespace = "http://ws.monster.edu.ec/";
-
-        private static readonly string[] DotNetBaseUrls =
-        [
-            "https://dnsoapsoto.dr00p3r.top",
-            "http://192.168.100.53:62278",
-            "http://10.0.2.2:62278",
-            "http://localhost:62278"
-        ];
+        private const string BaseUrl = "https://serversoap.dr00p3r.top";
 
         public async Task<bool> LoginAsync(string usuario, string clave)
         {
-            foreach (var baseUrl in DotNetBaseUrls)
+            try
             {
-                try
+                var binding = new BasicHttpsBinding
                 {
-                    var dotNetBody = $"""
-                        <Login xmlns="http://tempuri.org/">
-                          <usuario>{SecurityElement(usuario)}</usuario>
-                          <clave>{SecurityElement(clave)}</clave>
-                        </Login>
-                        """;
+                    MaxBufferSize = int.MaxValue,
+                    MaxReceivedMessageSize = int.MaxValue,
+                    Security = new BasicHttpsSecurity { Mode = BasicHttpsSecurityMode.Transport }
+                };
 
-                    var document = await PostSoapAsync($"{baseUrl}/Services/LoginService.svc", "http://tempuri.org/ILoginService/Login", dotNetBody);
-                    var result = document.Descendants().FirstOrDefault(e => e.Name.LocalName == "LoginResult")?.Value;
-                    if (!string.IsNullOrWhiteSpace(result))
-                    {
-                        return string.Equals(result, "true", StringComparison.OrdinalIgnoreCase);
-                    }
-                }
-                catch
-                {
-                    // Try the next reachable service endpoint.
-                }
+                var client = new LoginServiceClient(binding, new EndpointAddress($"{BaseUrl}/Services/LoginService.svc"));
+                return await client.LoginAsync(usuario, clave);
             }
-
-            var javaBody = $"""
-                <iniciarSesion xmlns="{JavaNamespace}">
-                  <usuario>{SecurityElement(usuario)}</usuario>
-                  <contrasena>{SecurityElement(clave)}</contrasena>
-                </iniciarSesion>
-                """;
-
-            var javaDocument = await PostSoapAsync(JavaSoapUrl, $"{JavaNamespace}iniciarSesion", javaBody);
-            var javaResult = javaDocument.Descendants().FirstOrDefault(e => e.Name.LocalName == "resultado")?.Value;
-            return string.Equals(javaResult, "true", StringComparison.OrdinalIgnoreCase);
+            catch (TimeoutException ex)
+            {
+                throw new HttpRequestException("El servidor tardó demasiado en responder. Verifica tu conexión a Internet.", ex);
+            }
+            catch (HttpRequestException ex)
+            {
+                throw new HttpRequestException($"No se pudo conectar al servidor. Verifica que {BaseUrl} sea accesible.", ex);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error al iniciar sesión: {ex.Message}", ex);
+            }
         }
 
         public async Task<List<AccountSummary>> GetAccountsAsync()
         {
-            foreach (var baseUrl in DotNetBaseUrls)
+            try
             {
-                try
+                var binding = new BasicHttpsBinding
                 {
-                    var dotNetBody = """
-                        <GetDatosCuentas xmlns="http://tempuri.org/" />
-                        """;
+                    MaxBufferSize = int.MaxValue,
+                    MaxReceivedMessageSize = int.MaxValue,
+                    Security = new BasicHttpsSecurity { Mode = BasicHttpsSecurityMode.Transport }
+                };
 
-                    var document = await PostSoapAsync($"{baseUrl}/Services/MovimientosService.svc", "http://tempuri.org/IMovimientosService/GetDatosCuentas", dotNetBody);
-                    var accounts = ParseAccounts(document, "CuentaData");
-                    if (accounts.Count > 0)
-                    {
-                        return accounts;
-                    }
-                }
-                catch
-                {
-                    // Try the next reachable service endpoint.
-                }
+                var client = new MovimientosServiceClient(binding, new EndpointAddress($"{BaseUrl}/Services/MovimientosService.svc"));
+                var cuentas = await client.GetDatosCuentasAsync();
+                return cuentas
+                    .Where(c => !string.IsNullOrWhiteSpace(c.Codigo))
+                    .Select(c => new AccountSummary(
+                        c.Codigo,
+                        c.NombreCliente,
+                        c.Moneda,
+                        c.Saldo,
+                        c.Estado,
+                        c.EmailCliente))
+                    .ToList();
             }
-
-            var javaBody = $"""
-                <traerCuentasConClientes xmlns="{JavaNamespace}" />
-                """;
-
-            var javaDocument = await PostSoapAsync(JavaSoapUrl, $"{JavaNamespace}traerCuentasConClientes", javaBody);
-            return ParseAccounts(javaDocument, "return", "cuentas", "item", "DatosCuenta");
+            catch
+            {
+                return [];
+            }
         }
 
         public async Task<List<MovementSummary>> GetMovementsAsync(string account)
         {
-            foreach (var baseUrl in DotNetBaseUrls)
+            try
             {
-                try
+                var binding = new BasicHttpsBinding
                 {
-                    var dotNetBody = $"""
-                        <GetMovimientos xmlns="http://tempuri.org/">
-                          <cuenta>{SecurityElement(account)}</cuenta>
-                        </GetMovimientos>
-                        """;
+                    MaxBufferSize = int.MaxValue,
+                    MaxReceivedMessageSize = int.MaxValue,
+                    Security = new BasicHttpsSecurity { Mode = BasicHttpsSecurityMode.Transport }
+                };
 
-                    var document = await PostSoapAsync($"{baseUrl}/Services/MovimientosService.svc", "http://tempuri.org/IMovimientosService/GetMovimientos", dotNetBody);
-                    var movements = ParseMovements(document, "MovimientoData");
-                    if (movements.Count > 0)
-                    {
-                        return movements;
-                    }
-                }
-                catch
-                {
-                    // Try the next reachable service endpoint.
-                }
+                var client = new MovimientosServiceClient(binding, new EndpointAddress($"{BaseUrl}/Services/MovimientosService.svc"));
+                var movimientos = await client.GetMovimientosAsync(account);
+                return movimientos
+                    .Where(m => !string.IsNullOrWhiteSpace(m.Tipo))
+                    .Select(m => new MovementSummary(
+                        m.Tipo,
+                        m.Importe,
+                        m.Fecha,
+                        m.Referencia,
+                        m.SaldoActual))
+                    .ToList();
             }
-
-            var javaBody = $"""
-                <traerMovimientos xmlns="{JavaNamespace}">
-                  <cuenta>{SecurityElement(account)}</cuenta>
-                </traerMovimientos>
-                """;
-
-            var javaDocument = await PostSoapAsync(JavaSoapUrl, $"{JavaNamespace}traerMovimientos", javaBody);
-            return ParseMovements(javaDocument, "return", "movimientos", "item", "MovimientoData");
+            catch
+            {
+                return [];
+            }
         }
 
         public async Task<List<string>> GetMovementTypesAsync()
         {
-            foreach (var baseUrl in DotNetBaseUrls)
+            try
             {
-                try
+                var binding = new BasicHttpsBinding
                 {
-                    var body = """
-                        <GetTiposMovimiento xmlns="http://tempuri.org/" />
-                        """;
+                    MaxBufferSize = int.MaxValue,
+                    MaxReceivedMessageSize = int.MaxValue,
+                    Security = new BasicHttpsSecurity { Mode = BasicHttpsSecurityMode.Transport }
+                };
 
-                    var document = await PostSoapAsync($"{baseUrl}/Services/MovimientosService.svc", "http://tempuri.org/IMovimientosService/GetTiposMovimiento", body);
-                    var types = document.Descendants()
-                        .Where(e => e.Name.LocalName == "string")
-                        .Select(e => e.Value.Trim())
-                        .Where(value => !string.IsNullOrWhiteSpace(value))
-                        .Distinct(StringComparer.OrdinalIgnoreCase)
-                        .ToList();
-
-                    if (types.Count > 0)
-                    {
-                        return types;
-                    }
-                }
-                catch
-                {
-                    // Try the next reachable service endpoint.
-                }
+                var client = new MovimientosServiceClient(binding, new EndpointAddress($"{BaseUrl}/Services/MovimientosService.svc"));
+                var tipos = await client.GetTiposMovimientoAsync();
+                return tipos
+                    .Where(t => !string.IsNullOrWhiteSpace(t))
+                    .Distinct(StringComparer.OrdinalIgnoreCase)
+                    .ToList();
             }
-
-            return ["DEPOSITO", "RETIRO", "TRANSFERENCIA"];
+            catch
+            {
+                return ["DEPOSITO", "RETIRO", "TRANSFERENCIA"];
+            }
         }
 
         public async Task<OperationResult> ProcessMovementAsync(string tipo, string cuentaOrigen, string cuentaDestino, decimal importe)
         {
-            Exception? lastError = null;
-            foreach (var baseUrl in DotNetBaseUrls)
+            try
             {
-                try
+                var binding = new BasicHttpsBinding
                 {
-                    var body = $"""
-                        <ProcesarMovimiento xmlns="http://tempuri.org/">
-                          <tipo>{SecurityElement(tipo)}</tipo>
-                          <cuentaOrigen>{SecurityElement(cuentaOrigen)}</cuentaOrigen>
-                          <cuentaDestino>{SecurityElement(cuentaDestino)}</cuentaDestino>
-                          <importe>{importe.ToString(CultureInfo.InvariantCulture)}</importe>
-                        </ProcesarMovimiento>
-                        """;
+                    MaxBufferSize = int.MaxValue,
+                    MaxReceivedMessageSize = int.MaxValue,
+                    Security = new BasicHttpsSecurity { Mode = BasicHttpsSecurityMode.Transport }
+                };
 
-                    var document = await PostSoapAsync($"{baseUrl}/Services/MovimientosService.svc", "http://tempuri.org/IMovimientosService/ProcesarMovimiento", body);
-                    var result = document.Descendants().FirstOrDefault(e => e.Name.LocalName == "ProcesarMovimientoResult");
-                    if (result is not null)
-                    {
-                        return new OperationResult(
-                            IntValue(result, "Codigo"),
-                            Value(result, "Mensaje"));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    lastError = ex;
-                }
+                var client = new MovimientosServiceClient(binding, new EndpointAddress($"{BaseUrl}/Services/MovimientosService.svc"));
+                var resultado = await client.ProcesarMovimientoAsync(tipo, cuentaOrigen, cuentaDestino, importe);
+                return new OperationResult(resultado.Codigo, resultado.Mensaje);
             }
-
-            return new OperationResult(-1, lastError?.Message ?? "No se pudo conectar al servicio.");
+            catch (Exception ex)
+            {
+                return new OperationResult(-1, ex.Message ?? "No se pudo conectar al servicio.");
+            }
         }
-
-        private static async Task<XDocument> PostSoapAsync(string url, string action, string body)
-        {
-            var envelope = $"""
-                <?xml version="1.0" encoding="utf-8"?>
-                <s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-                  <s:Body>{body}</s:Body>
-                </s:Envelope>
-                """;
-
-            using var request = new HttpRequestMessage(HttpMethod.Post, url);
-            request.Headers.TryAddWithoutValidation("SOAPAction", $"\"{action}\"");
-            request.Content = new StringContent(envelope, Encoding.UTF8, "text/xml");
-
-            using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(12));
-            using var response = await HttpClient.SendAsync(request, timeout.Token);
-            var xml = await response.Content.ReadAsStringAsync();
-            response.EnsureSuccessStatusCode();
-            return XDocument.Parse(xml);
-        }
-
-        private static List<AccountSummary> ParseAccounts(XDocument document, params string[] containerNames)
-        {
-            var preferredNames = containerNames.Length == 0 ? new[] { "CuentaData" } : containerNames;
-            return document.Descendants()
-                .Where(e => preferredNames.Contains(e.Name.LocalName) || HasAny(e, "Codigo", "NombreCliente", "Saldo"))
-                .Select(e => new AccountSummary(
-                    Value(e, "Codigo"),
-                    Value(e, "NombreCliente"),
-                    Value(e, "Moneda"),
-                    DecimalValue(e, "Saldo"),
-                    Value(e, "Estado"),
-                    FirstValue(e, "EmailCliente", "Email")))
-                .Where(a => !string.IsNullOrWhiteSpace(a.Codigo))
-                .GroupBy(a => a.Codigo)
-                .Select(g => g.First())
-                .ToList();
-        }
-
-        private static List<MovementSummary> ParseMovements(XDocument document, params string[] containerNames)
-        {
-            var preferredNames = containerNames.Length == 0 ? new[] { "MovimientoData" } : containerNames;
-            return document.Descendants()
-                .Where(e => preferredNames.Contains(e.Name.LocalName) || HasAny(e, "Tipo", "Importe", "SaldoActual"))
-                .Select(e => new MovementSummary(
-                    Value(e, "Tipo"),
-                    DecimalValue(e, "Importe"),
-                    DateValue(e, "Fecha"),
-                    Value(e, "Referencia"),
-                    DecimalValue(e, "SaldoActual")))
-                .Where(m => !string.IsNullOrWhiteSpace(m.Tipo))
-                .ToList();
-        }
-
-        private static bool HasAny(XElement parent, params string[] names) => names.Any(name => parent.Elements().Any(e => e.Name.LocalName == name));
-        private static string FirstValue(XElement parent, params string[] names) => names.Select(name => Value(parent, name)).FirstOrDefault(value => !string.IsNullOrWhiteSpace(value)) ?? string.Empty;
-        private static string SecurityElement(string value) => System.Security.SecurityElement.Escape(value) ?? string.Empty;
-        private static string Value(XElement parent, string name) => parent.Elements().FirstOrDefault(e => e.Name.LocalName == name)?.Value ?? string.Empty;
-        private static int IntValue(XElement parent, string name) => int.TryParse(Value(parent, name), NumberStyles.Integer, CultureInfo.InvariantCulture, out var value) ? value : -1;
-        private static decimal DecimalValue(XElement parent, string name) => decimal.TryParse(Value(parent, name), NumberStyles.Any, CultureInfo.InvariantCulture, out var value) ? value : 0m;
-        private static DateTime DateValue(XElement parent, string name) => DateTime.TryParse(Value(parent, name), CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal, out var value) ? value : DateTime.MinValue;
     }
 
     public sealed record AccountSummary(string Codigo, string NombreCliente, string Moneda, decimal Saldo, string Estado, string Email)

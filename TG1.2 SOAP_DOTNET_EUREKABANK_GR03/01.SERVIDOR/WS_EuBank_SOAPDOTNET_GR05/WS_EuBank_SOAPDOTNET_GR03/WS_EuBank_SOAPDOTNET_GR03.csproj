@@ -133,6 +133,11 @@
     <Compile Include="DataContracts.cs" />
     <Compile Include="Interfaces\ILoginService.cs" />
     <Compile Include="Interfaces\IMovimientosService.cs" />
+    <Compile Include="Migrations\202605180416544_CreacionInicial.cs" />
+    <Compile Include="Migrations\202605180416544_CreacionInicial.Designer.cs">
+      <DependentUpon>202605180416544_CreacionInicial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Cliente.cs" />
     <Compile Include="Models\Cuenta.cs" />
     <Compile Include="Models\EurekaBankContext.cs" />
@@ -158,6 +163,11 @@
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\202605180416544_CreacionInicial.resx">
+      <DependentUpon>202605180416544_CreacionInicial.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

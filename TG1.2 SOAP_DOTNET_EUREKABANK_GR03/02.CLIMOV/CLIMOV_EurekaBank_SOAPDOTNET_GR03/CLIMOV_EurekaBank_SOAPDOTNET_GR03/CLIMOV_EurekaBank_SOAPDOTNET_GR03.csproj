@@ -1,5 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFrameworks>net9.0-android</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
@@ -13,17 +13,14 @@
     <ApplicationId>com.companyname.CLIMOV_EurekaBank_SOAPDOTNET_GR03</ApplicationId>
     <WindowsPackageType>None</WindowsPackageType>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.Maui.Controls" Version="9.0.120" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
   </ItemGroup>
-
   <ItemGroup>
     <MauiImage Include="Resources\Images\*.png" />
     <EmbeddedResource Include="Resources\Images\*.png" />
   </ItemGroup>
-
   <ItemGroup>
     <MauiXaml Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -44,11 +41,14 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Views\AccountsScreen.xaml.cs">
       <DependentUpon>AccountsScreen.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
-
+  <ItemGroup>
+    <PackageReference Include="System.ServiceModel.Http" Version="8.*" />
+    <PackageReference Include="System.ServiceModel.NetTcp" Version="8.*" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="8.*" />
+  </ItemGroup>
 </Project>
