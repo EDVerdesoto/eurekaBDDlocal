@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="CLICON_EuBank_RESTDOTNET_GR03/CLICON_EuBank_RESTDOTNET_GR03.csproj" />
+  <Project Path="CLIESC_EuBank_RESTDOTNET_GR03/CLIESC_EuBank_RESTDOTNET_GR03.csproj" />
+  <Project Path="CLIMOV_EurekaBank_RESTDOTNET_GR03/CLIMOV_EurekaBank_RESTDOTNET_GR03.csproj" />
+  <Project Path="CLIWEB_EuBank_RESTDOTNET_GR03/CLIWEB_EuBank_RESTDOTNET_GR03.csproj" />
+  <Project Path="WS_EuBank_RESTDOTNET_GR03/WS_EuBank_RESTDOTNET_GR03.csproj" />
+</Solution>
