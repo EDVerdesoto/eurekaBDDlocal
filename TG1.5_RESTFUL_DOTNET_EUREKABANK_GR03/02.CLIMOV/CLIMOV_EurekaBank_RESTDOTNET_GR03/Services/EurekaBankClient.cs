@@ -6,7 +6,7 @@ namespace CLIMOV_EurekaBank_RESTDOTNET_GR03.Services
     public sealed class EurekaBankClient
     {
         private static readonly HttpClient HttpClient = CreateHttpClient();
-        private static readonly string[] BaseUrls = ["https://serverrest.dr00p3r.top/api"];
+        private static readonly string[] BaseUrls = ["https://dnrestsoto.dr00p3r.top/api"];
 
         public static string? LastConnectionError { get; private set; }
 

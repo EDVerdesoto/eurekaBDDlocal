@@ -27,6 +27,30 @@ public interface WSEurekaBank {
 
     /**
      * 
+     * @param tipo
+     * @param cuentaDestino
+     * @param cuentaOrigen
+     * @param importe
+     * @return
+     *     returns ec.edu.monster.ws.eurekabank.ResultadoOperacion
+     */
+    @WebMethod
+    @WebResult(name = "resultado", targetNamespace = "")
+    @RequestWrapper(localName = "regMovimiento", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.RegMovimiento")
+    @ResponseWrapper(localName = "regMovimientoResponse", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.RegMovimientoResponse")
+    @Action(input = "http://ws.monster.edu.ec/WSEurekaBank/regMovimientoRequest", output = "http://ws.monster.edu.ec/WSEurekaBank/regMovimientoResponse")
+    public ResultadoOperacion regMovimiento(
+        @WebParam(name = "cuentaOrigen", targetNamespace = "")
+        String cuentaOrigen,
+        @WebParam(name = "cuentaDestino", targetNamespace = "")
+        String cuentaDestino,
+        @WebParam(name = "tipo", targetNamespace = "")
+        String tipo,
+        @WebParam(name = "importe", targetNamespace = "")
+        double importe);
+
+    /**
+     * 
      * @param usuario
      * @param contrasena
      * @return
@@ -60,27 +84,15 @@ public interface WSEurekaBank {
 
     /**
      * 
-     * @param tipo
-     * @param cuentaDestino
-     * @param cuentaOrigen
-     * @param importe
      * @return
-     *     returns ec.edu.monster.ws.eurekabank.ResultadoOperacion
+     *     returns java.util.List<ec.edu.monster.ws.eurekabank.DatosCuenta>
      */
     @WebMethod
-    @WebResult(name = "resultado", targetNamespace = "")
-    @RequestWrapper(localName = "regMovimiento", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.RegMovimiento")
-    @ResponseWrapper(localName = "regMovimientoResponse", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.RegMovimientoResponse")
-    @Action(input = "http://ws.monster.edu.ec/WSEurekaBank/regMovimientoRequest", output = "http://ws.monster.edu.ec/WSEurekaBank/regMovimientoResponse")
-    public ResultadoOperacion regMovimiento(
-        @WebParam(name = "cuentaOrigen", targetNamespace = "")
-        String cuentaOrigen,
-        @WebParam(name = "cuentaDestino", targetNamespace = "")
-        String cuentaDestino,
-        @WebParam(name = "tipo", targetNamespace = "")
-        String tipo,
-        @WebParam(name = "importe", targetNamespace = "")
-        double importe);
+    @WebResult(name = "GetDatosCuentasResult", targetNamespace = "")
+    @RequestWrapper(localName = "traerCuentasConClientes", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.TraerCuentasConClientes")
+    @ResponseWrapper(localName = "traerCuentasConClientesResponse", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.TraerCuentasConClientesResponse")
+    @Action(input = "http://ws.monster.edu.ec/WSEurekaBank/traerCuentasConClientesRequest", output = "http://ws.monster.edu.ec/WSEurekaBank/traerCuentasConClientesResponse")
+    public List<DatosCuenta> traerCuentasConClientes();
 
     /**
      * 
@@ -93,17 +105,5 @@ public interface WSEurekaBank {
     @ResponseWrapper(localName = "tipoMovimientosPermitidosResponse", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.TipoMovimientosPermitidosResponse")
     @Action(input = "http://ws.monster.edu.ec/WSEurekaBank/tipoMovimientosPermitidosRequest", output = "http://ws.monster.edu.ec/WSEurekaBank/tipoMovimientosPermitidosResponse")
     public List<String> tipoMovimientosPermitidos();
-
-    /**
-     * 
-     * @return
-     *     returns java.util.List<ec.edu.monster.ws.eurekabank.DatosCuenta>
-     */
-    @WebMethod
-    @WebResult(name = "GetDatosCuentasResult", targetNamespace = "")
-    @RequestWrapper(localName = "traerCuentasConClientes", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.TraerCuentasConClientes")
-    @ResponseWrapper(localName = "traerCuentasConClientesResponse", targetNamespace = "http://ws.monster.edu.ec/", className = "ec.edu.monster.ws.eurekabank.TraerCuentasConClientesResponse")
-    @Action(input = "http://ws.monster.edu.ec/WSEurekaBank/traerCuentasConClientesRequest", output = "http://ws.monster.edu.ec/WSEurekaBank/traerCuentasConClientesResponse")
-    public List<DatosCuenta> traerCuentasConClientes();
 
 }

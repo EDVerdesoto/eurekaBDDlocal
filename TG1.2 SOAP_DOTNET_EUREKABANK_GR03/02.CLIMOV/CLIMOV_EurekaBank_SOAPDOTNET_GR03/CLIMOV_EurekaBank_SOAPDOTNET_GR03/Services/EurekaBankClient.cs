@@ -7,7 +7,7 @@ namespace CLIMOV_EurekaBank_SOAPDOTNET_GR03.Services
 {
     public sealed class EurekaBankClient
     {
-        private const string BaseUrl = "https://serversoap.dr00p3r.top";
+        private const string BaseUrl = "https://dnsoapsoto.dr00p3r.top";
 
         public async Task<bool> LoginAsync(string usuario, string clave)
         {
