@@ -1,7 +1,10 @@
+using CLIWEB_EuBank_SOAPDOTNET_GR03.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<IEurekaBankSoapService, EurekaBankSoapService>();
 
 // Agregar CORS
 builder.Services.AddCors(options =>

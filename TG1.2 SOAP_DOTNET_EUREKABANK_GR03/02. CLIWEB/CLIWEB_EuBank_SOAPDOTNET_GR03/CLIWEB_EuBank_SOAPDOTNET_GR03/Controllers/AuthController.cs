@@ -1,17 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ServiceReference1;
+using CLIWEB_EuBank_SOAPDOTNET_GR03.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CLIWEB_EuBank_SOAPDOTNET_GR03.Controllers
 {
     public class AuthController : Controller
     {
+        private readonly IEurekaBankSoapService _eurekaBankService;
+
+        public AuthController(IEurekaBankSoapService eurekaBankService)
+        {
+            _eurekaBankService = eurekaBankService;
+        }
+
         public IActionResult Login()
         {
-            // Si ya est� autenticado, redirigir al dashboard
             if (HttpContext.Session.GetString("Usuario") != null)
             {
                 return RedirectToAction("Index", "Dashboard");
             }
+
             return View();
         }
 
@@ -20,20 +27,16 @@ namespace CLIWEB_EuBank_SOAPDOTNET_GR03.Controllers
         {
             try
             {
-                var client = new LoginServiceClient();
-                bool resultado = await client.LoginAsync(usuario, clave);
+                bool resultado = await _eurekaBankService.LoginAsync(usuario, clave);
 
                 if (resultado)
                 {
-                    // Guardar el usuario en la sesi�n
                     HttpContext.Session.SetString("Usuario", usuario);
                     return RedirectToAction("Index", "Dashboard");
                 }
-                else
-                {
-                    ViewBag.Error = "Usuario o contrase�a incorrectos";
-                    return View();
-                }
+
+                ViewBag.Error = "Usuario o contrasena incorrectos";
+                return View();
             }
             catch (Exception ex)
             {
