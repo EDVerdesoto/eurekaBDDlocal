@@ -9,7 +9,7 @@ namespace CLIWEB_EuBank_RESTDOTNET_GR03.Services
         public EuBankApiService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            var baseUrl = configuration["EurekaBankApi:BaseUrl"] ?? "https://localhost:44342/api/";
+            var baseUrl = configuration["EurekaBankApi:BaseUrl"] ?? "https://dnrestsoto.dr00p3r.top/api/";
             _httpClient.BaseAddress = new Uri(baseUrl);
         }
 
