@@ -1,6 +1,0 @@
-@WS_EuBank_RESTDOTNET_GR03_HostAddress = http://localhost:5218
-
-GET {{WS_EuBank_RESTDOTNET_GR03_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

@@ -102,5 +102,10 @@ namespace CLIESC_EuBank_SOAPDOTNET_GR03.views
             lblUsuario.Text = $"Bienvenido, {User}"; // Assuming lblUsuario is a label to display the user
             btn_clients_Click(null, e);
         }
+
+        private void Contenedor_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

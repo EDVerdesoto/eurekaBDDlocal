@@ -97,7 +97,7 @@
             this.GW_Clients.EnableHeadersVisualStyles = false;
             this.GW_Clients.GridColor = System.Drawing.Color.FromArgb(((int)(((byte)(170)))), ((int)(((byte)(157)))), ((int)(((byte)(196)))));
             this.GW_Clients.Location = new System.Drawing.Point(24, 132);
-            this.GW_Clients.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.GW_Clients.Margin = new System.Windows.Forms.Padding(2);
             this.GW_Clients.Name = "GW_Clients";
             this.GW_Clients.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -117,7 +117,7 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
             this.GW_Clients.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.GW_Clients.RowTemplate.Height = 24;
-            this.GW_Clients.Size = new System.Drawing.Size(604, 324);
+            this.GW_Clients.Size = new System.Drawing.Size(963, 324);
             this.GW_Clients.TabIndex = 3;
             // 
             // ldPanelRound2
@@ -130,9 +130,9 @@
             this.ldPanelRound2.Controls.Add(this.pictureBox2);
             this.ldPanelRound2.CornerRadius = 10;
             this.ldPanelRound2.Location = new System.Drawing.Point(24, 27);
-            this.ldPanelRound2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ldPanelRound2.Margin = new System.Windows.Forms.Padding(2);
             this.ldPanelRound2.Name = "ldPanelRound2";
-            this.ldPanelRound2.Size = new System.Drawing.Size(604, 81);
+            this.ldPanelRound2.Size = new System.Drawing.Size(963, 81);
             this.ldPanelRound2.TabIndex = 2;
             // 
             // label1
@@ -163,7 +163,7 @@
             // 
             this.pictureBox2.Image = global::CLIESC_EuBank_SOAPDOTNET_GR03.Properties.Resources.SulliGeneral;
             this.pictureBox2.Location = new System.Drawing.Point(13, 2);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(74, 76);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -177,7 +177,7 @@
             this.ldPanelRound1.BorderThickness = 0;
             this.ldPanelRound1.CornerRadius = 10;
             this.ldPanelRound1.Location = new System.Drawing.Point(46, 27);
-            this.ldPanelRound1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ldPanelRound1.Margin = new System.Windows.Forms.Padding(2);
             this.ldPanelRound1.Name = "ldPanelRound1";
             this.ldPanelRound1.Size = new System.Drawing.Size(549, 81);
             this.ldPanelRound1.TabIndex = 0;
@@ -187,16 +187,16 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(652, 492);
+            this.ClientSize = new System.Drawing.Size(1017, 492);
             this.Controls.Add(this.GW_Clients);
             this.Controls.Add(this.ldPanelRound2);
             this.Controls.Add(this.ldPanelRound1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AccountClient";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "AccountClient";
             this.Load += new System.EventHandler(this.AccountClient_Load_1);
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.GW_Clients)).EndInit();
             this.ldPanelRound2.ResumeLayout(false);
