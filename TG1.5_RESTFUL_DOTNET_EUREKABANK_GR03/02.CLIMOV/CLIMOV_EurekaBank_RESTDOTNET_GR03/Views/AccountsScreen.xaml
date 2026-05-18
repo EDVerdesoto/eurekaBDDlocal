@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CLIMOV_EurekaBank_RESTDOTNET_GR03.Views.AccountsScreen"
+             Title="Cuentas"
+             BackgroundColor="{StaticResource BackgroundColor}">
+    <Grid RowDefinitions="64,*">
+        <Grid BackgroundColor="{StaticResource PrimaryColor}" ColumnDefinitions="*,Auto" Padding="16,0">
+            <HorizontalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                <Image Source="sulli_general.png" WidthRequest="32" HeightRequest="32" />
+                <Label Text="Cuentas" TextColor="White" FontSize="20" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
+            <Button Grid.Column="1" Text="↻" Clicked="OnRefreshClicked" BackgroundColor="Transparent" TextColor="White" FontSize="24" WidthRequest="52" />
+        </Grid>
+
+        <CollectionView Grid.Row="1" x:Name="AccountsList" SelectionMode="None" Margin="0,8">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border BackgroundColor="White" StrokeThickness="0" Margin="16,8" Padding="16">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding Codigo}" FontSize="18" FontAttributes="Bold" TextColor="#202124" />
+                                <Label Text="{Binding ClienteMoneda}" FontSize="14" TextColor="#4D4D4D" />
+                                <Label Text="{Binding SaldoTexto}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" />
+                                <Label Text="{Binding EstadoEmail}" FontSize="13" TextColor="#6F6F6F" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="›" FontSize="34" TextColor="#777777" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnAccountTapped" CommandParameter="{Binding Codigo}" />
+                            </Grid.GestureRecognizers>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

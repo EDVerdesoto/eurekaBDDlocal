@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "CLIWEB_EuBank_RESTDOTNET_GR03": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:64631;http://localhost:64632"
+    }
+  }
+}

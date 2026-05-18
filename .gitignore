@@ -1,0 +1,28 @@
+# Maven
+target/
+
+# Binarios Java
+*.class
+*.jar
+*.war
+
+# Maven metadata
+**/maven-status/
+
+# IDE basura
+*.ser
+
+# .NET Build outputs
+**/bin/
+**/obj/
+
+**\bin\
+**\obj\
+
+# Visual Studio
+**/.vs/
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="CLIMOV_EurekaBank_RESTDOTNET_GR03.Views.MovementsScreen"
+             BackgroundColor="{StaticResource BackgroundColor}">
+    <Grid RowDefinitions="64,*">
+        <Grid BackgroundColor="{StaticResource PrimaryColor}" ColumnDefinitions="Auto,*" Padding="8,0">
+            <Button Text="‹" Clicked="OnBackClicked" BackgroundColor="Transparent" TextColor="White" FontSize="30" WidthRequest="48" />
+            <HorizontalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                <Image Source="sulli_general.png" WidthRequest="32" HeightRequest="32" />
+                <Label x:Name="TitleLabel" TextColor="White" FontSize="18" FontAttributes="Bold" VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <CollectionView x:Name="MovementsList" SelectionMode="None" Margin="0,8">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <VerticalStackLayout>
+                            <Grid Padding="18,12" RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+                                <Label Text="{Binding TipoImporte}" FontSize="16" FontAttributes="Bold" TextColor="{Binding Color}" />
+                                <Label Grid.Row="1" Text="{Binding Fecha}" FontSize="12" TextColor="#777777" />
+                                <VerticalStackLayout Grid.Column="1" Grid.RowSpan="2" Spacing="4" HorizontalOptions="End">
+                                    <Label Text="{Binding Referencia}" FontSize="13" TextColor="#4D4D4D" HorizontalTextAlignment="End" />
+                                    <Label Text="{Binding SaldoTexto}" FontSize="13" TextColor="#4D4D4D" HorizontalTextAlignment="End" />
+                                </VerticalStackLayout>
+                            </Grid>
+                            <BoxView HeightRequest="1" Color="#E0E0E0" />
+                        </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <Button Text="+"
+                    Clicked="OnNewMovementClicked"
+                    WidthRequest="58"
+                    HeightRequest="58"
+                    CornerRadius="29"
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    TextColor="White"
+                    FontSize="30"
+                    HorizontalOptions="End"
+                    VerticalOptions="End"
+                    Margin="0,0,20,20" />
+        </Grid>
+    </Grid>
+</ContentPage>
