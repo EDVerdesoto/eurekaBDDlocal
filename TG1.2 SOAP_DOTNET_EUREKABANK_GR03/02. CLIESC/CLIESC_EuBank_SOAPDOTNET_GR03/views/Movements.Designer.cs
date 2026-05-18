@@ -81,7 +81,7 @@
             dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
             this.GW_Movements.RowsDefaultCellStyle = dataGridViewCellStyle3;
             this.GW_Movements.RowTemplate.Height = 24;
-            this.GW_Movements.Size = new System.Drawing.Size(1167, 371);
+            this.GW_Movements.Size = new System.Drawing.Size(623, 371);
             this.GW_Movements.TabIndex = 4;
             this.GW_Movements.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.GW_Movements_CellContentClick);
             // 
@@ -98,7 +98,7 @@
             this.ldPanelRound1.Location = new System.Drawing.Point(18, 22);
             this.ldPanelRound1.Margin = new System.Windows.Forms.Padding(2);
             this.ldPanelRound1.Name = "ldPanelRound1";
-            this.ldPanelRound1.Size = new System.Drawing.Size(1167, 66);
+            this.ldPanelRound1.Size = new System.Drawing.Size(623, 66);
             this.ldPanelRound1.TabIndex = 1;
             // 
             // btn_Ingresar
@@ -112,7 +112,7 @@
             this.btn_Ingresar.Font = new System.Drawing.Font("Leelawadee UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btn_Ingresar.ForeColor = System.Drawing.Color.White;
             this.btn_Ingresar.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btn_Ingresar.Location = new System.Drawing.Point(805, 13);
+            this.btn_Ingresar.Location = new System.Drawing.Point(533, 13);
             this.btn_Ingresar.Margin = new System.Windows.Forms.Padding(2);
             this.btn_Ingresar.Name = "btn_Ingresar";
             this.btn_Ingresar.Size = new System.Drawing.Size(73, 40);
@@ -162,7 +162,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1196, 492);
+            this.ClientSize = new System.Drawing.Size(652, 492);
             this.Controls.Add(this.GW_Movements);
             this.Controls.Add(this.ldPanelRound1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
