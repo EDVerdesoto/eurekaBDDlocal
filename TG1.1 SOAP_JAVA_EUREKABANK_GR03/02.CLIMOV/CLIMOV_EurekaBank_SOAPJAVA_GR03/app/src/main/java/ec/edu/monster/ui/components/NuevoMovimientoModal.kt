@@ -15,17 +15,13 @@ fun NuevoMovimientoModal(
     onSuccess: () -> Unit
 ) {
     var tipo by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    val opciones = listOf("Transferencia", "Deposito", "Retiro")
+
     var importe by remember { mutableStateOf("") }
     var cuentaDestino by remember { mutableStateOf("") }
     var loading by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
-    var tiposDisponibles by remember { mutableStateOf<List<String>>(emptyList()) }
-
-    LaunchedEffect(Unit) {
-        EurekaBankService.obtenerTiposMovimiento { list, _ ->
-            tiposDisponibles = list
-        }
-    }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -34,13 +30,35 @@ fun NuevoMovimientoModal(
             Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                 Text("Cuenta Origen: $cuenta")
                 
-                // Selector de tipo (simplificado)
-                OutlinedTextField(
-                    value = tipo,
-                    onValueChange = { tipo = it },
-                    label = { Text("Tipo de Movimiento") },
+                ExposedDropdownMenuBox(
+                    expanded = expanded,
+                    onExpandedChange = { expanded = !expanded },
                     modifier = Modifier.fillMaxWidth()
-                )
+                ) {
+                    OutlinedTextField(
+                        value = tipo,
+                        onValueChange = {},
+                        readOnly = true,
+                        label = { Text("Tipo de Movimiento") },
+                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                        modifier = Modifier.menuAnchor().fillMaxWidth(),
+                        colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                    )
+                    ExposedDropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false }
+                    ) {
+                        opciones.forEach { opcion ->
+                            DropdownMenuItem(
+                                text = { Text(opcion) },
+                                onClick = {
+                                    tipo = opcion
+                                    expanded = false
+                                }
+                            )
+                        }
+                    }
+                }
 
                 OutlinedTextField(
                     value = importe,
